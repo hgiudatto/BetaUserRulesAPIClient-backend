@@ -3,11 +3,13 @@ const axios = require("axios");
 const bodyParser = require("body-parser");
 const { response, application } = require("express");
 
+let jsonParser = bodyParser.json();
+
 const app = express();
 
 app.use(express.json());
 
-app.get("/checkBetaUser", async (req, res) => {
+app.get("/checkBetaUser", jsonParser, async (req, res) => {
   try {
     let response = await axios.post(
       "https://pmc-ms-config-manager.pmc-dev.prismamp.com/v1/config/beta-users",
@@ -34,6 +36,7 @@ app.get("/isBetaUser", async (req, res) => {
     );
     response.status === 200 && res.send({ message: "Es Beta User" });
   } catch (error) {
+    console.log(error.message);
     res.send({ message: "No es Beta User" });
   }
 });
